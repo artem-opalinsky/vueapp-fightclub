@@ -3,12 +3,11 @@
     <Navbar />
     <div v-for="posts in APIData" :key="posts.id">
       <b-container>
-        <b-row>
-          {{posts.title}}
-        </b-row>
-        <b-row>
-          {{posts.content}}
-        </b-row>
+        <b-card title = '{{ posts.title }}'>
+          <b-card-text>
+            {{ posts.content }}
+          </b-card-text>
+        </b-card>
       </b-container>
     </div>
   </div>
@@ -16,25 +15,23 @@
 
 <script>
   import Navbar from "@/components/Navbar"
-  import { getAPI } from '../axios.api'
+  import { getAPI } from '@/axios.api'
   import 'bootstrap/dist/css/bootstrap.css'
   import 'bootstrap-vue/dist/bootstrap-vue.css'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Posts',
-    data() {
-      return{
-        APIData: []
-      }
-    },
+
     components:{
       Navbar
     },
+    computed: mapState(['APIData']),
+
     created() {
-      getAPI.get('/posts/',)
+      getAPI.get('/posts/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
         .then(response => {
-          console.log('Post API has recieved data')
-          this.APIData = response.data
+          this.$store.state.APIData = response.data
         })
       .catch(err => {
         console.log(err)
