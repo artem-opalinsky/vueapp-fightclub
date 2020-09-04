@@ -15,7 +15,7 @@
           class="mb-2 mr-sm-2 mb-sm-0"
           placeholder="Password"
       ></b-input>
-      <b-button type="submit" variant="primary">Log In</b-button>
+      <b-button type="submit"  variant="primary">Log In</b-button>
     </b-form>
   </div>
 </template>
@@ -34,6 +34,7 @@ export default {
   },
   methods:{
     onLogin(){
+      console.log(this.password, this.login)
       this.$store.dispatch('userLogin',{
         login: this.login,
         password: this.password

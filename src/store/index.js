@@ -7,19 +7,29 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         accessToken: null,
-        refreshToken: null
+        refreshToken: null,
+        APIData: ''
     },
     mutations: {
         updateStorage (state, { access, refresh}) {
             state.accessToken = access
             state.refreshToken = refresh
+        },
+        destroyToken (state) {
+            state.accessToken = null
+            state.refreshToken = null
+        }
+    },
+    getters:{
+        loggedIn (state) {
+            return state.accessToken != null
         }
     },
     actions: {
         userLogin (context, usercredentials) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 getAPI.post('/api-token/', {
-                    login: usercredentials.login,
+                    username: usercredentials.login,
                     password: usercredentials.password
                 })
                     .then(response => {
@@ -30,6 +40,11 @@ export default new Vuex.Store({
                         resolve()
                     })
             })
+        },
+        userLogout(context) {
+            if (context.getters.loggedIn) {
+                context.commit('destroyToken')
+            }
         }
     },
     modules: {

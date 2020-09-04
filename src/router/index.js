@@ -9,7 +9,10 @@ export default new VueRouter({
         {
             path: '/',
             name: 'posts',
-            component: () => import('../views/Posts')
+            component: () => import('../views/Posts'),
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: '/login',

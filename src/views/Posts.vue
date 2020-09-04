@@ -3,7 +3,7 @@
     <Navbar />
     <div v-for="posts in APIData" :key="posts.id">
       <b-container>
-        <b-card title = '{{ posts.title }}'>
+        <b-card :title = 'posts.title'>
           <b-card-text>
             {{ posts.content }}
           </b-card-text>
