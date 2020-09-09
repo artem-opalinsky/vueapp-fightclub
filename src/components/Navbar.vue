@@ -5,15 +5,11 @@
         <router-link to="/">Fight Club</router-link>
       </b-nav-item>
       <b-nav-item>
-        <router-link to="/">Posts</router-link>
+        <router-link to="/">Game</router-link>
       </b-nav-item>
-      <b-nav-item v-if="accessToken!=null">
+      <b-nav-item v-if="auth">
         <router-link to="/logout">Logout</router-link>
       </b-nav-item>
-      <b-nav-item v-else>
-        <router-link to="/login">Login</router-link>
-      </b-nav-item>
-
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -25,7 +21,7 @@
 
   export default {
     name: 'Navbar',
-    computed: mapState(['accessToken'])
+    computed: mapState(['auth'])
   }
 
 </script>

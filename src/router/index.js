@@ -8,8 +8,8 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            name: 'posts',
-            component: () => import('../views/Posts'),
+            name: 'game',
+            component: () => import('../views/Game'),
             meta: {
                 requiresLogin: true
             }

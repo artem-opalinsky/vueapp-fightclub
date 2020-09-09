@@ -1,7 +1,7 @@
 <template>
   <div class="logmodal">
-    <p v-if="incorrectAuth">Incorrect login or password entered - please try again</p>
     <b-form @submit.prevent="onLogin">
+      <h4 class="center">Log In</h4>
       <b-input
           v-model="login"
           id="login"
@@ -16,6 +16,7 @@
           placeholder="Password"
       ></b-input>
       <b-button type="submit"  variant="primary">Log In</b-button>
+      <p v-if="incorrectAuth">Incorrect login or password entered - please try again</p>
     </b-form>
   </div>
 </template>
@@ -40,7 +41,7 @@ export default {
         password: this.password
       })
       .then(() => {
-        this.$router.push({ name: 'posts' })
+        this.$router.push({ name: 'game' })
       })
       .catch(err => {
         console.log(err)
@@ -66,7 +67,20 @@ button{
   margin: .5rem auto;
 }
 .logmodal{
+  width: 100%;
+  height: 80%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  overflow: auto;
+}
+.center {
   display: flex;
   justify-content: center;
+  align-content: center;
 }
 </style>
