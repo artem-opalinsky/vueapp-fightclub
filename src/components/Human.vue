@@ -38,7 +38,7 @@
         <b-button class="right-leg leg"
               :class="{'blue-color' : humanTest2.rightLeg && this.$props.humandefense, 'red-color' : humanTest2.rightLeg && this.$props.humanattack }"
               :disabled="human2Disabled && !humanTest2.rightLeg"
-              v-on:click="humanTest2.rightHand = !humanTest2.rightLeg">
+              v-on:click="humanTest2.rightLeg = !humanTest2.rightLeg">
         </b-button>
       </b-col>
     </b-row>
@@ -60,8 +60,7 @@ export default {
         body: false,
         head: false,
         leftLeg: false,
-        rightLeg: false,
-        count: 0
+        rightLeg: false
       }
     }
   },

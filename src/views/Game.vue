@@ -1,8 +1,7 @@
 <template>
   <div class="game">
     <Navbar />
-      <b-container
-      >
+      <b-container>
         <b-row>
           <div v-for="posts in APIData" :key="posts.id">
             <b-card :title = 'posts.title'>
@@ -72,13 +71,17 @@
         this.$data.Human2 = human
       },
       onReady(){
-        getAPI.post('/human/', ['Human1', 'Human2'])
-        .then(response => {
-          this.$store.state.firstscore = response.data
+        this.$store.dispatch('userAction',{
+          Human1 : this.Human1,
+          Human2 : this.Human2
+        })
+        .then(() => {
+          // this.$router.push({ name: 'game' })
         })
         .catch(err => {
           console.log(err)
         })
+
       }
     },
     created() {

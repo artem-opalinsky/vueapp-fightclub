@@ -11,6 +11,8 @@ export default new Vuex.Store({
         APIData: '',
         jwt: localStorage.getItem('token'),
         auth: false,
+        scoreFirst: 0,
+        scoreSecond: 0
     },
     mutations: {
         updateStorage (state, { access }) {
@@ -26,6 +28,10 @@ export default new Vuex.Store({
             localStorage.removeItem('token')
             state.jwt = null
             state.auth = false
+        },
+        updataActionStorage (state, {scoreFirst, scoreSecond}) {
+            state.scoreFirst = scoreFirst
+            state.scoreSecond =scoreSecond
         }
     },
     getters:{
@@ -34,6 +40,22 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        userAction (context, humancredentials){
+            return new Promise((resolve) => {
+                getAPI.post('/human/', {
+                    humandefense: humancredentials.Human1,
+                    humanattack: humancredentials.Human2
+                })
+                    .then(response => {
+                        context.commit('updateActionStorage', {
+                            scoreFirst: response.data.scorefirst,
+                            scoreSecond: response.data.scoresecond
+                        })
+                        console.log(response.data)
+                        resolve()
+                    })
+            })
+        },
         userLogin (context, usercredentials) {
             return new Promise((resolve) => {
                 getAPI.post('/api-token/', {
