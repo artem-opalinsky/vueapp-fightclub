@@ -7,7 +7,13 @@
       <b-nav-item>
         <router-link to="/">Game</router-link>
       </b-nav-item>
-      <b-nav-item v-if="auth">
+      <b-nav-item v-if="!loggedIn">
+        <router-link to="/login">Login</router-link>
+      </b-nav-item>
+      <b-nav-item v-if="loggedIn">
+        <router-link to="/table">Statistics</router-link>
+      </b-nav-item>
+      <b-nav-item v-if="loggedIn">
         <router-link to="/logout">Logout</router-link>
       </b-nav-item>
     </b-navbar-nav>
@@ -17,11 +23,11 @@
 <script>
   import 'bootstrap/dist/css/bootstrap.css'
   import 'bootstrap-vue/dist/bootstrap-vue.css'
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'Navbar',
-    computed: mapState(['auth'])
+    computed: mapGetters(['loggedIn'])
   }
 
 </script>

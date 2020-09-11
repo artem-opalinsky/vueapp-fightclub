@@ -3,42 +3,42 @@
     <b-row>
       <b-col class="centerblock">
         <b-button class="head"
-              :class="{'blue-color' : humanTest2.head && this.$props.humandefense, 'red-color' : humanTest2.head && this.$props.humanattack }"
-              :disabled="human2Disabled && !humanTest2.head"
-              v-on:click="humanTest2.head = !humanTest2.head">
+              :class="{'blue-color' : human.head && this.$props.humandefense, 'red-color' : human.head && this.$props.humanattack }"
+              :disabled="humanDisabled && !human.head"
+              v-on:click="human.head = !human.head">
         </b-button>
       </b-col>
     </b-row>
     <b-row>
       <b-col class="centerblock">
         <b-button class="left-hand hand"
-              :class="{'blue-color' : humanTest2.leftHand && this.$props.humandefense, 'red-color' : humanTest2.leftHand && this.$props.humanattack }"
-              :disabled="human2Disabled && !humanTest2.leftHand"
-              v-on:click="humanTest2.leftHand = !humanTest2.leftHand">
+              :class="{'blue-color' : human.leftHand && this.$props.humandefense, 'red-color' : human.leftHand && this.$props.humanattack }"
+              :disabled="humanDisabled && !human.leftHand"
+              v-on:click="human.leftHand = !human.leftHand">
         </b-button>
         <b-button class="body"
-              :class="{'blue-color' : humanTest2.body && this.$props.humandefense, 'red-color' : humanTest2.body && this.$props.humanattack }"
-              :disabled="human2Disabled && !humanTest2.body"
-              v-on:click="humanTest2.body = !humanTest2.body">
+              :class="{'blue-color' : human.body && this.$props.humandefense, 'red-color' : human.body && this.$props.humanattack }"
+              :disabled="humanDisabled && !human.body"
+              v-on:click="human.body = !human.body">
         </b-button>
         <b-button class="right-hand hand"
-              :class="{'blue-color' : humanTest2.rightHand && this.$props.humandefense, 'red-color' : humanTest2.rightHand && this.$props.humanattack }"
-              :disabled="human2Disabled && !humanTest2.rightHand"
-              v-on:click="humanTest2.rightHand = !humanTest2.rightHand">
+              :class="{'blue-color' : human.rightHand && this.$props.humandefense, 'red-color' : human.rightHand && this.$props.humanattack }"
+              :disabled="humanDisabled && !human.rightHand"
+              v-on:click="human.rightHand = !human.rightHand">
         </b-button>
       </b-col>
     </b-row>
     <b-row>
       <b-col class="centerblock">
         <b-button class="left-leg leg"
-             :class="{'blue-color' : humanTest2.leftLeg && this.$props.humandefense, 'red-color' : humanTest2.leftLeg && this.$props.humanattack }"
-             :disabled="human2Disabled && !humanTest2.leftLeg"
-             v-on:click="humanTest2.leftLeg = !humanTest2.leftLeg">
+             :class="{'blue-color' : human.leftLeg && this.$props.humandefense, 'red-color' : human.leftLeg && this.$props.humanattack }"
+             :disabled="humanDisabled && !human.leftLeg"
+             v-on:click="human.leftLeg = !human.leftLeg">
         </b-button>
         <b-button class="right-leg leg"
-              :class="{'blue-color' : humanTest2.rightLeg && this.$props.humandefense, 'red-color' : humanTest2.rightLeg && this.$props.humanattack }"
-              :disabled="human2Disabled && !humanTest2.rightLeg"
-              v-on:click="humanTest2.rightLeg = !humanTest2.rightLeg">
+              :class="{'blue-color' : human.rightLeg && this.$props.humandefense, 'red-color' : human.rightLeg && this.$props.humanattack }"
+              :disabled="humanDisabled && !human.rightLeg"
+              v-on:click="human.rightLeg = !human.rightLeg">
         </b-button>
       </b-col>
     </b-row>
@@ -52,9 +52,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
   data(){
     return{
-      counterfirst: 0,
-      countersecond: 0,
-      humanTest2: {
+      human: {
         leftHand: false,
         rightHand: false,
         body: false,
@@ -66,10 +64,10 @@ export default {
   },
   props: ['humandefense', 'humanattack'],
   computed: {
-    human2Disabled () {
+    humanDisabled () {
       let counter = 0;
-      for (let item in this.humanTest2) {
-        if (this.humanTest2[item]) {
+      for (let item in this.human) {
+        if (this.human[item]) {
           counter++
         }
       }
@@ -81,282 +79,15 @@ export default {
     }
   },
   watch:{
-    // humanTest2: {
-    //   handler(){
-    //     this.$emit('send-humanTest2', this.humanTest2)
-    //     console.log('изменилось')
-    //   },
-    //   deep: true
-    // }
+    humanDisabled: function (){
+      this.$emit('send-disabled', this.humanDisabled)
+    }
   },
   created() {
-    this.$emit('send-humanTest2', this.humanTest2)
+    this.$emit('send-human', this.human)
   },
   methods:{
-    // clickHead: function (event) {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeHead) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeHead = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeHead = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeHead){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeHead = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeHead) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeHead = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeHead = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeHead){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeHead = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
-    // clickBody: function (event)  {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeBody) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeBody = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeBody = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //     else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeBody){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeBody = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeBody) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeBody = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeBody = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeBody){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeBody = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
-    // clickLeftHand: function (event)  {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeLeftHand) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeLeftHand = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeLeftHand = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //     else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeLeftHand){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeLeftHand = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeLeftHand) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeLeftHand = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeLeftHand = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeLeftHand){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeLeftHand = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
-    // clickRightHand: function (event)  {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeRightHand) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeRightHand = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeRightHand = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //     else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeRightHand){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeRightHand = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeRightHand) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeRightHand = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeRightHand = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeRightHand){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeRightHand = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
-    // clickLeftLeg: function (event)  {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeLeftLeg) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeLeftLeg = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeLeftLeg = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //     else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeLeftLeg){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeLeftLeg = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeLeftLeg) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeLeftLeg = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeLeftLeg = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeLeftLeg){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeLeftLeg = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
-    // clickRightLeg: function (event)  {
-    //   if (this.$props.humanfirst === true) {
-    //     if (this.$data.counterfirst < 3) {
-    //       if (!this.$props.Human1.activeRightLeg) {
-    //         event.target.style.backgroundColor = 'cornflowerblue'
-    //         this.$props.Human1.activeRightLeg = true
-    //         this.$data.counterfirst++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeRightLeg = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //     else if (this.$data.counterfirst === 3) {
-    //       if (this.$props.Human1.activeRightLeg){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human1.activeRightLeg = false
-    //         this.$data.counterfirst--
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     if (this.$data.countersecond < 3){
-    //       if (!this.$props.Human2.activeRightLeg) {
-    //         event.target.style.backgroundColor = 'red'
-    //         this.$props.Human2.activeRightLeg = true
-    //         this.$data.countersecond++
-    //       }
-    //       else {
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeRightLeg = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //     else if (this.$data.countersecond === 3) {
-    //       if (this.$props.Human2.activeRightLeg){
-    //         event.target.style.backgroundColor = '#fff'
-    //         this.$props.Human2.activeRightLeg = false
-    //         this.$data.countersecond--
-    //       }
-    //     }
-    //   }
-    // },
+
   },
   name: "Human"
 }

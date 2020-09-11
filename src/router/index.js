@@ -23,6 +23,11 @@ export default new VueRouter({
             path: '/logout',
             name: 'logout',
             component: () => import('../views/Logout')
+        },
+        {
+            path: '/table',
+            name: 'table',
+            component: () => import('../views/Table')
         }
 
     ]

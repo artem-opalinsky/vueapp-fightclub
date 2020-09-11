@@ -6,52 +6,79 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        // accessToken: null,
-        // refreshToken: null,
         APIData: '',
-        jwt: localStorage.getItem('token'),
-        auth: false,
+        accessToken: localStorage.getItem('access_token') || null,
+        refreshToken: localStorage.getItem('refresh_token') || null,
         scoreFirst: 0,
         scoreSecond: 0
     },
     mutations: {
-        updateStorage (state, { access }) {
-            // state.accessToken = access
-            // state.refreshToken = refresh
-            localStorage.setItem('token', access)
-            state.jwt = access
-            state.auth = true
+        updateStorage (state, { access, refresh }) {
+            localStorage.setItem('access_token', access)
+            localStorage.setItem('refresh_token', refresh)
+            state.accessToken = access
+            state.refreshToken = refresh
         },
         destroyToken (state) {
-            // state.accessToken = null
-            // state.refreshToken = null
-            localStorage.removeItem('token')
-            state.jwt = null
-            state.auth = false
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            state.accessToken = null
+            state.refreshToken = null
         },
-        updataActionStorage (state, {scoreFirst, scoreSecond}) {
+        updateActionStorage (state, {scoreFirst, scoreSecond}) {
             state.scoreFirst = scoreFirst
-            state.scoreSecond =scoreSecond
-        }
+            state.scoreSecond = scoreSecond
+        },
+        updateAccess (state, access) {
+            localStorage.setItem('access_token', access)
+            state.accessToken = access
+        },
     },
     getters:{
         loggedIn (state) {
-            return state.auth
+            return state.accessToken != null
         }
     },
     actions: {
+        refreshToken (context) {
+            return new Promise((resolve, reject) => {
+                getAPI.post('/api-token-refresh/', {
+                    refresh: context.state.refreshToken
+                }) // send the stored refresh token to the backend API
+                    .then(response => { // if API sends back new access and refresh token update the store
+                        console.log('New access successfully generated')
+                        context.commit('updateAccess', response.data.access)
+                        resolve(response.data.access)
+                    })
+                    .catch(err => {
+                        console.log('error in refreshToken Task')
+                        reject(err) // error generating new access and refresh token because refresh token has expired
+                    })
+            })
+        },
         userAction (context, humancredentials){
             return new Promise((resolve) => {
+                // getAPI.get('/posts/', {
+                //     headers:{ Authorization: `Bearer ${context.state.accessToken}`},
+                //     humanattack: humancredentials.Human1,
+                //     humandefense: humancredentials.Human2
+                // })
                 getAPI.post('/human/', {
-                    humandefense: humancredentials.Human1,
-                    humanattack: humancredentials.Human2
+                    headers:{ Authorization: `Bearer ${context.state.accessToken}`},
+                    humanattack: humancredentials.Human1
                 })
+                    .then(() => {
+                        getAPI.post('/human/', {
+                            headers:{ Authorization: `Bearer ${context.state.accessToken}`},
+                            humandefense:humancredentials.Human2
+                        })
+                    })
                     .then(response => {
                         context.commit('updateActionStorage', {
                             scoreFirst: response.data.scorefirst,
                             scoreSecond: response.data.scoresecond
                         })
-                        console.log(response.data)
+                        console.log('khkjb')
                         resolve()
                     })
             })
