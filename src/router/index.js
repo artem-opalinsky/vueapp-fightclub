@@ -11,23 +11,32 @@ export default new VueRouter({
             name: 'game',
             component: () => import('../views/Game'),
             meta: {
-                requiresLogin: true
+                requiresAuth: true
             }
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/Login')
+            component: () => import('../views/Login'),
+            meta: {
+                requiresLogged: true
+            }
         },
         {
             path: '/logout',
             name: 'logout',
-            component: () => import('../views/Logout')
+            component: () => import('../views/Logout'),
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/table',
             name: 'table',
-            component: () => import('../views/Table')
+            component: () => import('../views/Table'),
+            meta: {
+                requiresAuth: true
+            }
         }
 
     ]

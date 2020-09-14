@@ -58,15 +58,11 @@ export default new Vuex.Store({
         },
         userAction (context, humancredentials){
             return new Promise((resolve) => {
-                getAPI.post('/human/', {
-                    headers: { Authorization: `Bearer ${context.state.accessToken}`},
-                    data: { humanDefense: humancredentials.Human1 }
-                })
+                getAPI.post('/human/', humancredentials.Human1,
+                    {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
                     .then(() => {
-                        getAPI.post('/human/', {
-                            headers:{ Authorization: `Bearer ${context.state.accessToken}`},
-                            data: { humanAttack: humancredentials.Human2 }
-                        })
+                        getAPI.post('/human/', humancredentials.Human2,
+                            {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
                     })
                     .then(response => {
                         context.commit('updateActionStorage', {
