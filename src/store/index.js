@@ -10,7 +10,8 @@ export default new Vuex.Store({
         accessToken: localStorage.getItem('access_token') || null,
         refreshToken: localStorage.getItem('refresh_token') || null,
         scoreFirst: 0,
-        scoreSecond: 0
+        scoreSecond: 0,
+        loading: false
     },
     mutations: {
         updateStorage (state, { access, refresh }) {
@@ -25,13 +26,19 @@ export default new Vuex.Store({
             state.accessToken = null
             state.refreshToken = null
         },
-        updateActionStorage (state, {scoreFirst, scoreSecond}) {
+        updateActionStorage (state, {scoreFirst}) {
             state.scoreFirst = scoreFirst
-            state.scoreSecond = scoreSecond
+
         },
         updateAccess (state, access) {
             localStorage.setItem('access_token', access)
             state.accessToken = access
+        },
+        load(state){
+            state.loading = true
+        },
+        stopLoad(state){
+            state.loading = false
         },
     },
     getters:{
@@ -56,24 +63,42 @@ export default new Vuex.Store({
                     })
             })
         },
-        userAction (context, humancredentials){
+        async userAction (context, humancredentials){
             return new Promise((resolve) => {
+                context.commit('load')
+                humancredentials.Human1.isAttack = false
+                humancredentials.Human2.isAttack = true
                 getAPI.post('/human/', humancredentials.Human1,
                     {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
-                    .then(() => {
-                        getAPI.post('/human/', humancredentials.Human2,
-                            {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
-                    })
+                getAPI.post('/human/', humancredentials.Human2,
+                    {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
                     .then(response => {
-                        context.commit('updateActionStorage', {
-                            scoreFirst: response.data.scorefirst,
-                            scoreSecond: response.data.scoresecond
-                        })
+                        if (response.data.total_damage === null) {
+                            let polling = setInterval(() => {
+                                getAPI.get('/human/', {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
+                                    .then(response => {
+                                        if (response.data.total_damage !== null){
+                                            clearInterval(polling)
+                                            context.commit('updateActionStorage', {
+                                                scoreFirst: response.data.total_damage,
+                                            })
+                                        }
+                                    })
+                            }, 1000)
+                        }
+                        else {
+                            context.commit('updateActionStorage', {
+                                scoreFirst: response.data.total_damage,
+
+                            })
+                        }
+                        context.commit('stopLoad')
                         console.log('khkjb')
                         resolve()
-                    })
+                     })
             })
         },
+
         userLogin (context, usercredentials) {
             return new Promise((resolve) => {
                 getAPI.post('/api-token/', {

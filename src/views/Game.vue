@@ -14,7 +14,7 @@
         <b-row>
           <b-col class="frame">
             <b-col class="centerblock">1st player{{ disabledHuman1 }}</b-col>
-            <b-col class="centerblock">Score:</b-col>
+            <b-col class="centerblock">Score: {{ scoreFirst }}</b-col>
             <p>{{ Human1 }}</p>
             <Human
               v-bind:humandefense="true"
@@ -36,6 +36,9 @@
             Действия:
           </b-col>
         </b-row>
+        <Loader
+            v-if="loading"
+        />
         <b-row>
           <b-button block variant="primary" class="marginbtn" v-on:click="onReady"
           :disabled="!disabledHuman1 || !disabledHuman2"
@@ -52,6 +55,7 @@
   import 'bootstrap-vue/dist/bootstrap-vue.css'
   import { mapState } from 'vuex'
   import Human from "@/components/Human";
+  import Loader from "@/components/Loader"
 
   export default {
     name: 'Game',
@@ -65,9 +69,10 @@
     },
     components:{
       Navbar,
-      Human
+      Human,
+      Loader
     },
-    computed: mapState(['APIData', 'accessToken']),
+    computed: mapState(['APIData', 'accessToken', 'loading', 'scoreFirst']),
     methods:{
       getDisabled1(man){
         this.$data.disabledHuman1 = man
@@ -82,7 +87,6 @@
         this.$data.Human2 = human
       },
       onReady(){
-        console.log(this.$store.state.accessToken)
         this.$store.dispatch('userAction',{
           Human1 : this.Human1,
           Human2 : this.Human2
