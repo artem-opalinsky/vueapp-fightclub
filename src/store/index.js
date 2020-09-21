@@ -11,7 +11,8 @@ export default new Vuex.Store({
         refreshToken: localStorage.getItem('refresh_token') || null,
         scoreFirst: 0,
         scoreSecond: 0,
-        loading: false
+        loading: false,
+        gameRound: 1,
     },
     mutations: {
         updateStorage (state, { access, refresh }) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
         stopLoad(state){
             state.loading = false
         },
+        gameChangeRound(state){
+            state.gameRound++
+        }
     },
     getters:{
         loggedIn (state) {
@@ -82,6 +86,8 @@ export default new Vuex.Store({
                                             context.commit('updateActionStorage', {
                                                 scoreFirst: response.data.total_damage,
                                             })
+                                            context.commit('gameChangeRound')
+                                            context.commit('stopLoad')
                                         }
                                     })
                             }, 1000)
@@ -91,9 +97,9 @@ export default new Vuex.Store({
                                 scoreFirst: response.data.total_damage,
 
                             })
+                            context.commit('stopLoad')
+                            context.commit('gameChangeRound')
                         }
-                        context.commit('stopLoad')
-                        console.log('khkjb')
                         resolve()
                      })
             })

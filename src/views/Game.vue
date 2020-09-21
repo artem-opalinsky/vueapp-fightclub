@@ -1,6 +1,10 @@
 <template>
   <div class="game">
     <Navbar />
+    <Loader
+        v-if="loading"
+
+    />
       <b-container>
         <b-row>
           <div v-for="posts in APIData" :key="posts.id">
@@ -36,9 +40,6 @@
             Действия:
           </b-col>
         </b-row>
-        <Loader
-            v-if="loading"
-        />
         <b-row>
           <b-button block variant="primary" class="marginbtn" v-on:click="onReady"
           :disabled="!disabledHuman1 || !disabledHuman2"

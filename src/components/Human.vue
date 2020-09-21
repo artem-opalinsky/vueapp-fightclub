@@ -48,23 +48,24 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { mapState } from 'vuex'
 
 export default {
   data(){
     return{
       human: {
+        head: false,
+        body: false,
         leftHand: false,
         rightHand: false,
-        body: false,
-        head: false,
         leftLeg: false,
         rightLeg: false
       }
     }
   },
   props: ['humandefense', 'humanattack'],
-  computed: {
-    humanDisabled () {
+  computed:{
+    humanDisabled: function() {
       let counter = 0;
       for (let item in this.human) {
         if (this.human[item]) {
@@ -76,11 +77,20 @@ export default {
       } else {
         return false
       }
-    }
+    },
+    ...mapState(['gameRound']),
   },
   watch:{
     humanDisabled: function (){
       this.$emit('send-disabled', this.humanDisabled)
+    },
+    gameRound: function (){
+      this.$data.human.head = false
+      this.$data.human.body = false
+      this.$data.human.leftHand = false
+      this.$data.human.rightHand = false
+      this.$data.human.leftLeg = false
+      this.$data.human.rightLeg = false
     }
   },
   created() {
