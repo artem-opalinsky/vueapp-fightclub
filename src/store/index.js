@@ -9,8 +9,10 @@ export default new Vuex.Store({
         APIData: '',
         accessToken: localStorage.getItem('access_token') || null,
         refreshToken: localStorage.getItem('refresh_token') || null,
-        scoreFirst: 0,
-        scoreSecond: 0,
+        totalDamage: 0,
+        enemyDamage: 0,
+        currentDamage: [],
+        objDamage:{},
         loading: false,
         gameRound: 1,
     },
@@ -27,9 +29,19 @@ export default new Vuex.Store({
             state.accessToken = null
             state.refreshToken = null
         },
-        updateActionStorage (state, {scoreFirst}) {
-            state.scoreFirst = scoreFirst
+        updateActionStorage (state, {totalDamage, enemyDamage, currentDamage, currentEnemyDamage, responseObj}) {
+            state.totalDamage = totalDamage
+            state.enemyDamage = enemyDamage
+            state.objDamage.Damage = currentDamage
+            state.objDamage.EnemyDamage = currentEnemyDamage
+            state.currentDamage.push(responseObj)
 
+
+
+        },
+        updateTotalDamage (state, {totalDamage, enemyDamage}){
+            state.totalDamage = totalDamage
+            state.enemyDamage = enemyDamage
         },
         updateAccess (state, access) {
             localStorage.setItem('access_token', access)
@@ -67,24 +79,29 @@ export default new Vuex.Store({
                     })
             })
         },
-        async userAction (context, humancredentials){
+        async userAction (context, humans){
             return new Promise((resolve) => {
                 context.commit('load')
-                humancredentials.Human1.isAttack = false
-                humancredentials.Human2.isAttack = true
-                getAPI.post('/human/', humancredentials.Human1,
+                let sendHuman1 = Object.assign({isAttack:false},humans.Human1)
+                let sendHuman2 = Object.assign({isAttack:true},humans.Human2)
+                getAPI.post('/human/', sendHuman1,
                     {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
-                getAPI.post('/human/', humancredentials.Human2,
+                getAPI.post('/human/', sendHuman2,
                     {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
                     .then(response => {
-                        if (response.data.total_damage === null) {
+                        if (response.data.current_damage === null) {
                             let polling = setInterval(() => {
                                 getAPI.get('/human/', {headers: {Authorization: `Bearer ${context.state.accessToken}`}})
                                     .then(response => {
-                                        if (response.data.total_damage !== null){
+                                        if (response.data.current_damage !== null){
                                             clearInterval(polling)
+                                            let resp = { damage:response.data.current_damage, enemyDamage: response.data.current_enemy_damage}
                                             context.commit('updateActionStorage', {
-                                                scoreFirst: response.data.total_damage,
+                                                totalDamage: response.data.total_damage,
+                                                enemyDamage: response.data.enemy_damage,
+                                                currentDamage: response.data.current_damage,
+                                                currentEnemyDamage: response.data.current_enemy_damage,
+                                                responseObj: resp
                                             })
                                             context.commit('gameChangeRound')
                                             context.commit('stopLoad')
@@ -93,9 +110,13 @@ export default new Vuex.Store({
                             }, 1000)
                         }
                         else {
+                            let resp = { damage:response.data.current_damage, enemyDamage: response.data.current_enemy_damage}
                             context.commit('updateActionStorage', {
-                                scoreFirst: response.data.total_damage,
-
+                                totalDamage: response.data.total_damage,
+                                enemyDamage: response.data.enemy_damage,
+                                currentDamage: response.data.current_damage,
+                                currentEnemyDamage: response.data.current_enemy_damage,
+                                responseObj: resp
                             })
                             context.commit('stopLoad')
                             context.commit('gameChangeRound')

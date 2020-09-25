@@ -60,6 +60,7 @@ export default {
         rightHand: false,
         leftLeg: false,
         rightLeg: false
+
       }
     }
   },

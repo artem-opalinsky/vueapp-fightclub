@@ -19,10 +19,13 @@ getAPItoken.interceptors.response.use(undefined, function (err) {
                     baseURL: APIUrl,
                     method: 'get',
                     headers: { Authorization: `Bearer ${access}` },
-                    url: '/posts/'
+                    url: '/human/'
                 }).then(response => {
                     console.log('Success getting the posts')
-                    store.state.APIData = response.data
+                    store.dispatch('updateTotalDamage',{
+                        totalDamage: response.data.total_damage,
+                        enemyDamage: response.data.enemy_damage
+                    })
                 }).catch(err => {
                     console.log('Got the new access token but error while trying to fetch data from the API using it')
                     return Promise.reject(err)

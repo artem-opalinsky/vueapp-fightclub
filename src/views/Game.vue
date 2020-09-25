@@ -17,9 +17,8 @@
         </b-row>
         <b-row>
           <b-col class="frame">
-            <b-col class="centerblock">1st player{{ disabledHuman1 }}</b-col>
-            <b-col class="centerblock">Score: {{ scoreFirst }}</b-col>
-            <p>{{ Human1 }}</p>
+            <b-col class="centerblock">1st player</b-col>
+            <b-col class="centerblock">Score: {{ totalDamage }}</b-col>
             <Human
               v-bind:humandefense="true"
               v-on:send-human="getHuman1"
@@ -27,17 +26,22 @@
             />
           </b-col>
           <b-col class="frame">
-            <b-col class="centerblock">2nd player{{disabledHuman2}}</b-col>
-            <b-col class="centerblock">Score:</b-col>
-            <p>{{ Human2 }}</p>
+            <b-col class="centerblock">2nd player</b-col>
+            <b-col class="centerblock">Score: {{ enemyDamage }}</b-col>
             <Human
                 v-bind:humanattack="true"
                 v-on:send-human="getHuman2"
                 v-on:send-disabled="getDisabled2"
             />
           </b-col>
-          <b-col class="frame">
+          <b-col class="frame overflow">
             Действия:
+              <b-col v-for="(damage, index) in currentDamage" :key="index">
+                <b>{{index + 1}} раунд</b> <br>
+                Игрок 1 бьет Игрока 2 и наносит {{ damage.damage }} урона <br>
+                Игрок 2 бьет Игрока 1 и наносит {{ damage.enemyDamage }} урона
+                <hr>
+              </b-col>
           </b-col>
         </b-row>
         <b-row>
@@ -51,7 +55,7 @@
 
 <script>
   import Navbar from "@/components/Navbar"
-  import {getAPItoken} from '@/axios.api'
+  import { getAPItoken} from '@/axios.api'
   import 'bootstrap/dist/css/bootstrap.css'
   import 'bootstrap-vue/dist/bootstrap-vue.css'
   import { mapState } from 'vuex'
@@ -73,8 +77,14 @@
       Human,
       Loader
     },
-    computed: mapState(['APIData', 'accessToken', 'loading', 'scoreFirst']),
+    computed: mapState(['APIData', 'accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'objDamage']),
+    // watch:{
+    //   this.$store.state.objDamage(){
+    //     this.$store.state.currentDamage.push(this.$store.state.objDamage)
+    //   }
+    // },
     methods:{
+
       getDisabled1(man){
         this.$data.disabledHuman1 = man
       },
@@ -102,9 +112,13 @@
       }
     },
     created() {
-      getAPItoken.get('/posts/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+      getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
         .then(response => {
-          this.$store.state.APIData = response.data
+          this.$store.commit('updateTotalDamage',{
+            totalDamage: response.data.total_damage,
+            enemyDamage: response.data.enemy_damage
+          })
+
         })
       .catch(err => {
         console.log(err)
@@ -126,5 +140,10 @@
 .centerblock{
   display: flex;
   justify-content: center;
+}
+
+.overflow{
+  overflow-y: scroll;
+  height: 510px;
 }
 </style>
