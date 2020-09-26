@@ -5,16 +5,16 @@
         <router-link to="/">Fight Club</router-link>
       </b-nav-item>
       <b-nav-item>
-        <router-link to="/">Game</router-link>
+        <router-link to="/">Игра</router-link>
       </b-nav-item>
       <b-nav-item v-if="!loggedIn">
-        <router-link to="/login">Login</router-link>
+        <router-link to="/login">Вход</router-link>
       </b-nav-item>
       <b-nav-item v-if="loggedIn">
-        <router-link to="/table">Statistics</router-link>
+        <router-link to="/table">Статистика</router-link>
       </b-nav-item>
       <b-nav-item v-if="loggedIn">
-        <router-link to="/logout">Logout</router-link>
+        <router-link to="/logout">Выйти</router-link>
       </b-nav-item>
     </b-navbar-nav>
   </b-navbar>

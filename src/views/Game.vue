@@ -17,8 +17,8 @@
         </b-row>
         <b-row>
           <b-col class="frame">
-            <b-col class="centerblock">1st player</b-col>
-            <b-col class="centerblock">Score: {{ totalDamage }}</b-col>
+            <b-col class="centerblock">1 игрок</b-col>
+            <b-col class="centerblock">Счет: {{ totalDamage }}</b-col>
             <Human
               v-bind:humandefense="true"
               v-on:send-human="getHuman1"
@@ -26,8 +26,8 @@
             />
           </b-col>
           <b-col class="frame">
-            <b-col class="centerblock">2nd player</b-col>
-            <b-col class="centerblock">Score: {{ enemyDamage }}</b-col>
+            <b-col class="centerblock">2 игрок</b-col>
+            <b-col class="centerblock">Счет: {{ enemyDamage }}</b-col>
             <Human
                 v-bind:humanattack="true"
                 v-on:send-human="getHuman2"
@@ -47,7 +47,7 @@
         <b-row>
           <b-button block variant="primary" class="marginbtn" v-on:click="onReady"
           :disabled="!disabledHuman1 || !disabledHuman2"
-          >Ready!!!</b-button>
+          >Готово</b-button>
         </b-row>
       </b-container>
   </div>
