@@ -2,7 +2,7 @@
     <div class="modal-mask">
       <div class="modal-container">
         <b-row class="justify-content-md-center">
-            <p>Waiting for the second player...</p>
+            <p>Ожидание другого игрока...</p>
         </b-row>
         <b-row class="justify-content-md-center">
             <div class="lds-dual-ring"></div>

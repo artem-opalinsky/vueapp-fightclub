@@ -3,18 +3,8 @@
     <Navbar />
     <Loader
         v-if="loading"
-
     />
       <b-container>
-        <b-row>
-          <div v-for="posts in APIData" :key="posts.id">
-            <b-card :title = 'posts.title'>
-              <b-card-text>
-                {{ posts.content }}
-              </b-card-text>
-            </b-card>
-          </div>
-        </b-row>
         <b-row>
           <b-col class="frame">
             <b-col class="centerblock">1 игрок</b-col>
@@ -77,14 +67,8 @@
       Human,
       Loader
     },
-    computed: mapState(['APIData', 'accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'objDamage']),
-    // watch:{
-    //   this.$store.state.objDamage(){
-    //     this.$store.state.currentDamage.push(this.$store.state.objDamage)
-    //   }
-    // },
+    computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage']),
     methods:{
-
       getDisabled1(man){
         this.$data.disabledHuman1 = man
       },
@@ -102,13 +86,9 @@
           Human1 : this.Human1,
           Human2 : this.Human2
         })
-        .then(() => {
-          // this.$router.push({ name: 'game' })
-        })
         .catch(err => {
           console.log(err)
         })
-
       }
     },
     created() {
@@ -118,7 +98,6 @@
             totalDamage: response.data.total_damage,
             enemyDamage: response.data.enemy_damage
           })
-
         })
       .catch(err => {
         console.log(err)

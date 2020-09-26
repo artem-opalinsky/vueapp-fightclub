@@ -4,7 +4,7 @@
     <b-container>
       <b-row class="margin-row">
         <b-col>
-          <b-input type="text" placeholder="Поиск"
+          <b-input type="text" placeholder="Поиск по имени"
             v-model="searchValue"
           ></b-input>
         </b-col>
@@ -21,20 +21,20 @@
         </b-col>
         <label class="margin-top">с</label>
         <b-col>
-          <b-input type="date"
+          <b-input type="date" required
             v-model="fromDate"
             v-on:change="sort"
           ></b-input>
         </b-col>
         <label class="margin-top">по</label>
         <b-col>
-          <b-input type="date"
+          <b-input type="date" required
             v-model="toDate"
             v-on:change="sort"
           ></b-input>
         </b-col>
       </b-row>
-      <b-table striped hover :items="items"  :fields="fields"></b-table>
+      <b-table striped hover :items="filteredItems"  :fields="fields"></b-table>
     </b-container>
   </div>
 </template>
@@ -49,17 +49,13 @@ export default {
       typeSelectValue: null,
       fromDate: null,
       toDate: null,
-      searchValue: null,
+      searchValue: '',
       fields: ['user', 'date', 'isAttack', 'head', 'body', 'leftHand', 'rightHand', 'leftLeg', 'rightLeg'],
-      items: [
-        // { 'Игрок': 'Игрок 1', Дата_и_время: '10-09-2020 14:19', Тип: 'Удар', Голова: 'Да', Тело: 'Нет', Левая_рука: 'Нет', Правая_рука: 'Нет', Левая_нога: 'Нет', Правая_нога: 'Нет' },
-        // { user: 'Игрок 2', Дата_и_время: '10-09-2020 14:22', Тип: 'Защита', Голова: 'Нет', Тело: 'Нет', Левая_рука: 'Да', Правая_рука: 'Нет', Левая_нога: 'Нет', Правая_нога: 'Нет' },
-        // { user: 'Игрок 2', Дата_и_время: '10-09-2020 14:19', Тип: 'Удар', Голова: 'Нет', Тело: 'Да', Левая_рука: 'Нет', Правая_рука: 'Нет', Левая_нога: 'Нет', Правая_нога: 'Нет' },
-        // { user: 'Игрок 1', Дата_и_время: '10-09-2020 14:22', Тип: 'Защита', Голова: 'Нет', Тело: 'Нет', Левая_рука: 'Нет', Правая_рука: 'Нет', Левая_нога: 'Нет', Правая_нога: 'Да' }
-      ],
+      items: [],
 
     }
   },
+
   created() {
     getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
       .then(response => {
@@ -72,16 +68,20 @@ export default {
             }
             this.$data.items.push(response.data[i])
           }
-
       })
   },
-  computed:mapState(['accessToken']),
+  computed:{
+    filteredItems: function (){
+      return this.items.filter(item => {
+        if (this.searchValue === '') return true
+        else return item.user.indexOf(this.searchValue) !== -1
+      })
+    },
+    ...mapState(['accessToken']),
+  },
+
   methods:{
     sort(){
-      console.log(this.$data.searchValue)
-      console.log(this.$data.typeSelectValue)
-      console.log(this.$data.fromDate)
-      console.log(this.$data.toDate)
       getAPItoken.post('/statistics/',{
         isAttack: this.$data.typeSelectValue,
         fromDate: this.$data.fromDate,

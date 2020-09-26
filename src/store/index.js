@@ -6,13 +6,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        APIData: '',
         accessToken: localStorage.getItem('access_token') || null,
         refreshToken: localStorage.getItem('refresh_token') || null,
         totalDamage: 0,
         enemyDamage: 0,
         currentDamage: [],
-        objDamage:{},
         loading: false,
         gameRound: 1,
     },
@@ -29,15 +27,10 @@ export default new Vuex.Store({
             state.accessToken = null
             state.refreshToken = null
         },
-        updateActionStorage (state, {totalDamage, enemyDamage, currentDamage, currentEnemyDamage, responseObj}) {
+        updateActionStorage (state, {totalDamage, enemyDamage, responseObj}) {
             state.totalDamage = totalDamage
             state.enemyDamage = enemyDamage
-            state.objDamage.Damage = currentDamage
-            state.objDamage.EnemyDamage = currentEnemyDamage
             state.currentDamage.push(responseObj)
-
-
-
         },
         updateTotalDamage (state, {totalDamage, enemyDamage}){
             state.totalDamage = totalDamage

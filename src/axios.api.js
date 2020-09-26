@@ -22,7 +22,7 @@ getAPItoken.interceptors.response.use(undefined, function (err) {
                     url: '/human/'
                 }).then(response => {
                     console.log('Success getting the posts')
-                    store.dispatch('updateTotalDamage',{
+                    store.commit('updateTotalDamage',{
                         totalDamage: response.data.total_damage,
                         enemyDamage: response.data.enemy_damage
                     })
