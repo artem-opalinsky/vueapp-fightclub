@@ -56,19 +56,17 @@ export default {
     }
   },
 
-  created() {
-    getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
-      .then(response => {
-          for (let i in response.data){
-            for (let j in response.data[i]){
-              if (response.data[i][j] === true) response.data[i][j] = 'Да'
-              else if (response.data[i][j] === false) response.data[i][j] = 'Нет'
-              else if (response.data[i][j] === 1) response.data[i][j] = 'Игрок 1'
-              else if (response.data[i][j] === 2) response.data[i][j] = 'Игрок 2'
-            }
-            this.$data.items.push(response.data[i])
-          }
-      })
+  async created() {
+    const response = await getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+    for (let i in response.data){
+      for (let j in response.data[i]){
+        if (response.data[i][j] === true) response.data[i][j] = 'Да'
+        else if (response.data[i][j] === false) response.data[i][j] = 'Нет'
+        else if (response.data[i][j] === 1) response.data[i][j] = 'Игрок 1'
+        else if (response.data[i][j] === 2) response.data[i][j] = 'Игрок 2'
+      }
+      this.$data.items.push(response.data[i])
+    }
   },
   computed:{
     filteredItems: function (){
@@ -81,24 +79,22 @@ export default {
   },
 
   methods:{
-    sort(){
-      getAPItoken.post('/statistics/',{
+    async sort(){
+      const response = await getAPItoken.post('/statistics/',{
         isAttack: this.$data.typeSelectValue,
         fromDate: this.$data.fromDate,
         toDate: this.$data.toDate
       },{headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
-      .then(response => {
-        this.$data.items = []
-        for (let i in response.data){
-          for (let j in response.data[i]){
-            if (response.data[i][j] === true) response.data[i][j] = 'Да'
-            else if (response.data[i][j] === false) response.data[i][j] = 'Нет'
-            else if (response.data[i][j] === 1) response.data[i][j] = 'Игрок 1'
-            else if (response.data[i][j] === 2) response.data[i][j] = 'Игрок 2'
-          }
-          this.$data.items.push(response.data[i])
+      this.$data.items = []
+      for (let i in response.data){
+        for (let j in response.data[i]){
+          if (response.data[i][j] === true) response.data[i][j] = 'Да'
+          else if (response.data[i][j] === false) response.data[i][j] = 'Нет'
+          else if (response.data[i][j] === 1) response.data[i][j] = 'Игрок 1'
+          else if (response.data[i][j] === 2) response.data[i][j] = 'Игрок 2'
         }
-      })
+        this.$data.items.push(response.data[i])
+      }
     }
   },
 }

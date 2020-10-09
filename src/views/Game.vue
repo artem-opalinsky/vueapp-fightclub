@@ -91,17 +91,16 @@
         })
       }
     },
-    created() {
-      getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
-        .then(response => {
-          this.$store.commit('updateTotalDamage',{
-            totalDamage: response.data.total_damage,
-            enemyDamage: response.data.enemy_damage
-          })
+    async mounted() {
+      const response = await getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+      try {
+        this.$store.commit('updateTotalDamage',{
+          totalDamage: response.data.total_damage,
+          enemyDamage: response.data.enemy_damage
         })
-      .catch(err => {
+      } catch(err){
         console.log(err)
-      })
+      }
     }
   }
 </script>
