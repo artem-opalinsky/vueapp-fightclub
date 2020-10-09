@@ -77,7 +77,6 @@ export default {
     },
     ...mapState(['accessToken']),
   },
-
   methods:{
     async sort(){
       const response = await getAPItoken.post('/statistics/',{

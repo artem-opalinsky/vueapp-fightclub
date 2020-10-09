@@ -104,7 +104,8 @@ export default {
 }
 </script>
 
-<style scoped>.blue-color {
+<style scoped>
+.blue-color {
   background-color: #0022ff !important;
 }
 .red-color {

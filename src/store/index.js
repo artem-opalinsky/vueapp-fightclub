@@ -62,25 +62,32 @@ export default new Vuex.Store({
                 console.log('New access successfully generated')
                 context.commit('updateAccess', response.data.access)
             } catch (err){
-                console.log('error in refreshToken Task', err)
+                console.log('error in refreshToken', err)
             }
         },
         async userAction (context, humans){
             context.commit('load')
             let sendHuman1 = Object.assign({isAttack:false},humans.Human1)
             let sendHuman2 = Object.assign({isAttack:true},humans.Human2)
-            APIUserAction(sendHuman1)
-            const response = await APIUserAction(sendHuman2)
-            handlingData(response, context)
+            try {
+                APIUserAction(sendHuman1)
+                const response = await APIUserAction(sendHuman2)
+                handlingData(response, context)
+            } catch (err) {
+                console.log('Error in userAction', err)
+            }
         },
 
         async userLogin (context, usercredentials) {
-            const response = await APIUserLogin(usercredentials)
-            context.commit('updateStorage', {
-                access: response.data.access,
-                refresh: response.data.refresh,
-            })
-            console.log(response.data.access)
+            try {
+                const response = await APIUserLogin(usercredentials)
+                context.commit('updateStorage', {
+                    access: response.data.access,
+                    refresh: response.data.refresh,
+                })
+            } catch (err){
+                console.log('Error in userLogin', err)
+            }
         },
         userLogout(context) {
             if (context.getters.loggedIn) {
