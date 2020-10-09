@@ -17,7 +17,7 @@ const APIUserLogin = (usercredentials) => getAPItoken.post('/api-token/',{
     password: usercredentials.password
 })
 
-const APIRefreshToken = (context) => getAPItoken.post('/api-token-refresh/', context.state.refreshToken)
+const APIRefreshToken = (context) => getAPItoken.post('/api-token-refresh/', {refresh: context.state.refreshToken})
 
 const APIUserAction = (human) => getAPItoken.post('/human/', human, {headers: {Authorization: `Bearer ${store.state.accessToken}`}})
 
