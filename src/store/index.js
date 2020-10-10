@@ -12,6 +12,8 @@ export default new Vuex.Store({
         enemyDamage: 0,
         currentDamage: [],
         loading: false,
+        modalRooms: false,
+        roomList:[],
         gameRound: 1,
     },
     mutations: {

@@ -4,6 +4,9 @@
     <Loader
         v-if="loading"
     />
+    <RoomList
+        v-if="modalRooms"
+    />
       <b-container>
         <b-row>
           <b-button block variant="primary" class="marginbtn" v-on:click="showRoomList">Выбрать комнату</b-button>
@@ -54,6 +57,7 @@
   import { mapState } from 'vuex'
   import Human from "@/components/Human";
   import Loader from "@/components/Loader"
+  import RoomList from "@/components/RoomList";
 
   export default {
     name: 'Game',
@@ -62,21 +66,22 @@
         Human1:{},
         Human2:{},
         disabledHuman1:false,
-        disabledHuman2:false,
-        roomList: null
+        disabledHuman2:false
       }
     },
     components:{
+      RoomList,
       Navbar,
       Human,
       Loader
     },
-    computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage']),
+    computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'modalRooms', 'roomList']),
     methods:{
       async showRoomList(){
+        this.$store.state.modalRooms = true
         const response = await getAPItoken.get('/rooms/',{headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
-        this.$data.roomList = response.data
-        console.log(this.$data.roomList)
+        this.$store.state.roomList = response.data
+        console.log(this.$store.state.roomList)
       },
       getDisabled1(man){
         this.$data.disabledHuman1 = man
