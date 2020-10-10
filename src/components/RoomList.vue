@@ -17,9 +17,10 @@
 <script>
 import { mapState } from 'vuex'
 import {getAPItoken} from '@/axios.api.js'
+
 export default {
   name: "RoomList",
-  computed:mapState(['modalRooms', 'roomList', 'accessToken']),
+  computed:mapState(['modalRooms', 'roomList', 'accessToken', 'accessToBattle']),
   data(){
     return {
       responseData: null
@@ -31,8 +32,10 @@ export default {
     },
     async enterRoom(){
       let sendData = event.target.name
-      const response = await getAPItoken.post('/rooms/',{id:sendData}, {headers:{Authorization: `Bearer: ${this.$store.state.accessToken}`}})
+      const response = await getAPItoken.post('/rooms/',{id:sendData}, {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
       this.$data.responseData = response.data
+      this.closeRoomList()
+      this.$store.state.accessToBattle = true
     }
   }
 }
@@ -62,7 +65,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-size: 2.5rem;
-
+  border-radius: 10px;
 }
 
 .overflow-scroll{

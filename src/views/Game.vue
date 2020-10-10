@@ -42,7 +42,8 @@
         </b-row>
         <b-row>
           <b-button block variant="primary" class="marginbtn" v-on:click="onReady"
-          :disabled="!disabledHuman1 || !disabledHuman2"
+          :disabled="!disabledHuman1 || !disabledHuman2 || !accessToBattle"
+
           >Готово</b-button>
         </b-row>
       </b-container>
@@ -75,7 +76,7 @@
       Human,
       Loader
     },
-    computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'modalRooms', 'roomList']),
+    computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'modalRooms', 'roomList', 'accessToBattle']),
     methods:{
       async showRoomList(){
         this.$store.state.modalRooms = true

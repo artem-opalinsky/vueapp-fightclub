@@ -13,6 +13,7 @@ export default new Vuex.Store({
         currentDamage: [],
         loading: false,
         modalRooms: false,
+        accessToBattle: false,
         roomList:[],
         gameRound: 1,
     },
