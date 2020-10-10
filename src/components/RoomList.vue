@@ -36,6 +36,7 @@ export default {
       this.$data.responseData = response.data
       this.closeRoomList()
       this.$store.state.accessToBattle = true
+      this.$store.state.currentRoom = sendData
     }
   }
 }
