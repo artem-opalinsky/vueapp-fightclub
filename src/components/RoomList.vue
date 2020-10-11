@@ -7,7 +7,7 @@
       </b-row>
       <div class="overflow-scroll">
         <b-row class="justify-content-md-center" v-for="(room, index) in roomList" :key="index">
-          <b-col>Комната {{room["id"]}}<b-button pill variant="primary" v-on:click="enterRoom" :name="room['id']">Выбрать</b-button></b-col>
+          <b-col>Комната {{room["id"]}}<b-button pill variant="primary" v-on:click="enterRoom(room['id'])">Выбрать</b-button></b-col>
         </b-row>
       </div>
     </div>
@@ -30,13 +30,13 @@ export default {
     closeRoomList(){
       this.$store.state.modalRooms = false
     },
-    async enterRoom(){
-      let sendData = event.target.name
-      const response = await getAPItoken.post('/rooms/',{id:sendData}, {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
+    async enterRoom(roomId){
+      const response = await getAPItoken.post('/rooms/',{id:roomId}, {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
       this.$data.responseData = response.data
       this.closeRoomList()
       this.$store.state.accessToBattle = true
-      this.$store.state.currentRoom = sendData
+      this.$store.state.currentRoom = roomId
+      await this.$router.push({name: 'game'})
     }
   }
 }
@@ -62,7 +62,6 @@ export default {
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
-  border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-size: 2.5rem;

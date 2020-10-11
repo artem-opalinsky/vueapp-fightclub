@@ -13,9 +13,9 @@ export default new Vuex.Store({
         currentDamage: [],
         loading: false,
         modalRooms: false,
-        accessToBattle: false,
+        accessToBattle: true,
         currentRoom: null,
-        roomList:[],
+        roomList:[{id:1}],
         gameRound: 1,
     },
     mutations: {
@@ -71,8 +71,8 @@ export default new Vuex.Store({
         },
         async userAction (context, humans){
             context.commit('load')
-            let sendHuman1 = Object.assign({isAttack:false, roomId: this.currentRoom},humans.Human1)
-            let sendHuman2 = Object.assign({isAttack:true, roomId: this.currentRoom},humans.Human2)
+            let sendHuman1 = Object.assign({isAttack:false, roomId:context.state.currentRoom},humans.Human1)
+            let sendHuman2 = Object.assign({isAttack:true, roomId:context.state.currentRoom},humans.Human2)
             try {
                 APIUserAction(sendHuman1)
                 const response = await APIUserAction(sendHuman2)

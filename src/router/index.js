@@ -37,6 +37,14 @@ export default new VueRouter({
             meta: {
                 requiresAuth: true
             }
+        },
+        {
+            path: '/selectroom',
+            name: 'selectroom',
+            component: () => import('../views/SelectRoom'),
+            meta: {
+                requiresAuth: true
+            }
         }
 
     ]

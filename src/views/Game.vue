@@ -4,13 +4,13 @@
     <Loader
         v-if="loading"
     />
-    <RoomList
-        v-if="modalRooms"
-    />
+<!--    <RoomList-->
+<!--        v-if="modalRooms"-->
+<!--    />-->
       <b-container>
-        <b-row>
-          <b-button block variant="primary" class="marginbtn" v-on:click="showRoomList">Выбрать комнату</b-button>
-        </b-row>
+<!--        <b-row>-->
+<!--          <b-button block variant="primary" class="marginbtn" v-on:click="showRoomList">Выбрать комнату</b-button>-->
+<!--        </b-row>-->
         <b-row>
           <b-col class="frame">
             <b-col class="centerblock">1 игрок</b-col>
@@ -58,7 +58,7 @@
   import { mapState } from 'vuex'
   import Human from "@/components/Human";
   import Loader from "@/components/Loader"
-  import RoomList from "@/components/RoomList";
+  // import RoomList from "@/components/RoomList";
 
   export default {
     name: 'Game',
@@ -71,19 +71,19 @@
       }
     },
     components:{
-      RoomList,
+      // RoomList,
       Navbar,
       Human,
       Loader
     },
     computed: mapState(['accessToken', 'loading', 'totalDamage', 'enemyDamage', 'currentDamage', 'modalRooms', 'roomList', 'accessToBattle']),
     methods:{
-      async showRoomList(){
-        this.$store.state.modalRooms = true
-        const response = await getAPItoken.get('/rooms/',{headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
-        this.$store.state.roomList = response.data
-        console.log(this.$store.state.roomList)
-      },
+      // async showRoomList(){
+      //   this.$store.state.modalRooms = true
+      //   const response = await getAPItoken.get('/rooms/',{headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
+      //   this.$store.state.roomList = response.data
+      //   console.log(this.$store.state.roomList)
+      // },
       getDisabled1(man){
         this.$data.disabledHuman1 = man
       },
@@ -108,7 +108,7 @@
     },
     async mounted() {
       try {
-        const response = await getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+        const response = await getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`, data:this.$store.state.currentRoom}})
         this.$store.commit('updateTotalDamage',{
           totalDamage: response.data.total_damage,
           enemyDamage: response.data.enemy_damage

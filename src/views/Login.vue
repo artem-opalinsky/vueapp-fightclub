@@ -41,7 +41,7 @@ export default {
         password: this.password
       })
       .then(() => {
-        this.$router.push({ name: 'game' })
+        this.$router.push({ name: 'selectroom' })
       })
       .catch(err => {
         console.log(err)
