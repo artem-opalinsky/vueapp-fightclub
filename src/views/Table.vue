@@ -88,8 +88,7 @@ export default {
         for (let j in response.data[i]){
           if (response.data[i][j] === true) response.data[i][j] = 'Да'
           else if (response.data[i][j] === false) response.data[i][j] = 'Нет'
-          else if (response.data[i][j] === 1) response.data[i][j] = 'Игрок 1'
-          else if (response.data[i][j] === 2) response.data[i][j] = 'Игрок 2'
+          else if (response.data[i].id) response.data[i][j] = `Игрок ${response.data[i][j]}`
         }
         this.$data.items.push(response.data[i])
       }
