@@ -40,7 +40,7 @@
 </template>
 <script>
 import Navbar from "@/components/Navbar";
-import { getAPItoken } from "@/axios.api";
+import { tableSortAPI, mountTableAPI } from "@/axios.api";
 import { mapState } from 'vuex';
 export default {
   components: {Navbar},
@@ -56,8 +56,8 @@ export default {
     }
   },
 
-  async created() {
-    const response = await getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+  async mounted() {
+    const response = await mountTableAPI()
     for (let i in response.data){
       for (let j in response.data[i]){
         if (response.data[i][j] === true) response.data[i][j] = 'Да'
@@ -78,11 +78,7 @@ export default {
   },
   methods:{
     async sort(){
-      const response = await getAPItoken.post('/statistics/',{
-        isAttack: this.$data.typeSelectValue,
-        fromDate: this.$data.fromDate,
-        toDate: this.$data.toDate
-      },{headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`}})
+      const response = await tableSortAPI(this.$data.typeSelectValue, this.$data.fromDate, this.$data.toDate)
       this.$data.items = []
       for (let i in response.data){
         for (let j in response.data[i]){

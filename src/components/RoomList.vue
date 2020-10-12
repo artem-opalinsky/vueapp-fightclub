@@ -15,7 +15,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import {getAPItoken} from '@/axios.api.js'
+import {enterRoomAPI} from '@/axios.api.js'
 
 export default {
   name: "RoomList",
@@ -27,7 +27,7 @@ export default {
   },
   methods:{
     async enterRoom(roomId){
-      const response = await getAPItoken.post('/rooms/',{id:roomId}, {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
+      const response = await enterRoomAPI(roomId)
       this.$data.responseData = response.data
       this.$store.commit("setCurrentRoom", roomId)
       await this.$router.push({name: 'game'})
@@ -53,7 +53,7 @@ export default {
 .modal-container {
   width: 700px;
   height: 400px;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 20px 30px;
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

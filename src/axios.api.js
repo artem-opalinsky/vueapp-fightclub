@@ -17,6 +17,20 @@ const APIUserLogin = (usercredentials) => getAPItoken.post('/api-token/',{
     password: usercredentials.password
 })
 
+const mountGameAPI = () => getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${store.state.accessToken}`, data:store.state.currentRoom}})
+
+const mountSelectRoomAPI = () => getAPItoken.get('/rooms/',{headers: {Authorization: `Bearer ${store.state.accessToken}`}})
+
+const enterRoomAPI = (roomId) => getAPItoken.post('/rooms/',{id:roomId}, {headers: {Authorization: `Bearer ${store.state.accessToken}`}})
+
+const mountTableAPI = () => getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${store.state.accessToken}`}})
+
+const tableSortAPI = (isAttack, fromDate, toDate) => getAPItoken.post('/statistics/',{
+    isAttack: isAttack,
+    fromDate: fromDate,
+    toDate: toDate
+},{headers:{ Authorization: `Bearer ${store.state.accessToken}`}})
+
 const APIRefreshToken = (context) => getAPItoken.post('/api-token-refresh/', {refresh: context.state.refreshToken})
 
 const APIUserAction = (human) => getAPItoken.post('/human/', human, {headers: {Authorization: `Bearer ${store.state.accessToken}`}})
@@ -84,5 +98,5 @@ getAPItoken.interceptors.response.use(undefined, async function (err) {
 
 
 export {
-    getAPI, getAPItoken, APIUserLogin, APIUserAction, handlingData, APIRefreshToken
+    getAPI, getAPItoken, APIUserLogin, APIUserAction, handlingData, APIRefreshToken, mountGameAPI, mountSelectRoomAPI, mountTableAPI, tableSortAPI, enterRoomAPI
 }

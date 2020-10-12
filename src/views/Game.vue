@@ -46,7 +46,7 @@
 
 <script>
   import Navbar from "@/components/Navbar"
-  import { getAPItoken} from '@/axios.api'
+  import { mountGameAPI } from '@/axios.api'
   import 'bootstrap/dist/css/bootstrap.css'
   import 'bootstrap-vue/dist/bootstrap-vue.css'
   import { mapState } from 'vuex'
@@ -94,7 +94,7 @@
     },
     async mounted() {
       try {
-        const response = await getAPItoken.get('/loadpage/', {headers:{ Authorization: `Bearer ${this.$store.state.accessToken}`, data:this.$store.state.currentRoom}})
+        const response = await mountGameAPI()
         this.$store.commit('updateTotalDamage',{
           totalDamage: response.data.total_damage,
           enemyDamage: response.data.enemy_damage
