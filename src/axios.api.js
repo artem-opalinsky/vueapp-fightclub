@@ -54,30 +54,30 @@ const handlingData = (response, context) => {
     }
 }
 
-getAPItoken.interceptors.response.use(undefined, function (err) {
+getAPItoken.interceptors.response.use(undefined, async function (err) {
     if (err.config && err.response && err.response.status === 401) {
         console.log('Сработала ошибка!')
-        store.dispatch('refreshToken')
-            .then(access => {
-                axios.request({
+        try {
+            const access = await store.dispatch('refreshToken')
+            try {
+                const response = await axios.request({
                     baseURL: APIUrl,
                     method: 'get',
                     headers: { Authorization: `Bearer ${access}` },
                     url: '/human/'
-                }).then(response => {
-                    console.log('Success getting the posts')
-                    store.commit('updateTotalDamage',{
-                        totalDamage: response.data.total_damage,
-                        enemyDamage: response.data.enemy_damage
-                    })
-                }).catch(err => {
-                    console.log('Got the new access token but error while trying to fetch data from the API using it')
-                    return Promise.reject(err)
                 })
-            })
-            .catch(err => {
-                return Promise.reject(err)
-            })
+                console.log('Success getting the posts')
+                store.commit('updateTotalDamage',{
+                    totalDamage: response.data.total_damage,
+                    enemyDamage: response.data.enemy_damage
+                })
+            } catch (err){
+                console.log('Got the new access token but error while trying to fetch data from the API using it')
+                console.log(err)
+            }
+        } catch (err){
+            console.log(err)
+        }
     }
 })
 
