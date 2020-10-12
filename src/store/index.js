@@ -13,12 +13,19 @@ export default new Vuex.Store({
         currentDamage: [],
         loading: false,
         modalRooms: false,
-        accessToBattle: true,
-        currentRoom: null,
+        currentRoom: localStorage.getItem('current_room') || null,
         roomList:[{id:1}],
         gameRound: 1,
     },
     mutations: {
+        setCurrentRoom(state, currentRoom){
+            state.currentRoom = currentRoom
+            localStorage.setItem('current_room', currentRoom)
+        },
+        exitCurrentRoom(state){
+            state.currentRoom = null
+            localStorage.removeItem('current_room')
+        },
         updateStorage (state, { access, refresh }) {
             localStorage.setItem('access_token', access)
             localStorage.setItem('refresh_token', refresh)
@@ -55,8 +62,11 @@ export default new Vuex.Store({
         }
     },
     getters:{
-        loggedIn (state) {
+        loggedIn(state) {
             return state.accessToken != null
+        },
+        enteredRoom(state) {
+            return state.currentRoom != null
         }
     },
     actions: {

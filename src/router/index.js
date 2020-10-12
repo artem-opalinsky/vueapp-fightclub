@@ -11,7 +11,8 @@ export default new VueRouter({
             name: 'game',
             component: () => import('../views/Game'),
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                requiresEnterRoom: true
             }
         },
         {
@@ -35,7 +36,8 @@ export default new VueRouter({
             name: 'table',
             component: () => import('../views/Table'),
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                requiresEnterRoom: true
             }
         },
         {

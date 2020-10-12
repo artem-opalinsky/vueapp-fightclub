@@ -24,7 +24,7 @@ const APIUserAction = (human) => getAPItoken.post('/human/', human, {headers: {A
 const handlingData = (response, context) => {
     if (response.data.current_damage === null) {
         let polling = setInterval(async () => {
-            const secondResponse = await getAPI.get('/human/', {headers: {Authorization: `Bearer ${context.state.accessToken}`, data: {roomId:context.state.currentRoom}}})
+            const secondResponse = await getAPI.get('/human/', {headers: {Authorization: `Bearer ${context.state.accessToken}`, data: context.state.currentRoom}})
             if (secondResponse.data.current_damage !== null){
                 clearInterval(polling)
                 let resp = { damage:secondResponse.data.current_damage, enemyDamage: secondResponse.data.current_enemy_damage}

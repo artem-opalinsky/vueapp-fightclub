@@ -13,14 +13,19 @@ router.beforeEach((to, from, next) => {
     if (!store.getters.loggedIn) {
       next({ name: 'login' })
     } else {
+      if (to.matched.some(record => record.meta.requiresEnterRoom)){
+        if(!store.getters.enteredRoom){
+          next({name: 'selectroom'})
+        } else next()
+      }
       next()
     }
   } else if (to.matched.some(record => record.meta.requiresLogged)) {
-    if (store.getters.loggedIn) {
+    if (store.getters.loggedIn && store.getters.enteredRoom) {
       next({ name: 'game' })
-    } else {
-      next()
-    }
+    } else if (store.getters.loggedIn && !store.getters.enteredRoom) {
+      next({name: 'selectroom'})
+    } else next()
   } else {
     next()
   }

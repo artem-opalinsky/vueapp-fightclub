@@ -1,7 +1,6 @@
 <template>
   <div class="modal-mask">
     <div class="modal-container">
-      <b-btn-close v-on:click="closeRoomList"></b-btn-close>
       <b-row class="justify-content-md-center">
         <p>Список комнат</p>
       </b-row>
@@ -20,22 +19,17 @@ import {getAPItoken} from '@/axios.api.js'
 
 export default {
   name: "RoomList",
-  computed:mapState(['modalRooms', 'roomList', 'accessToken', 'accessToBattle']),
+  computed:mapState(['roomList', 'accessToken']),
   data(){
     return {
       responseData: null
     }
   },
   methods:{
-    closeRoomList(){
-      this.$store.state.modalRooms = false
-    },
     async enterRoom(roomId){
       const response = await getAPItoken.post('/rooms/',{id:roomId}, {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
       this.$data.responseData = response.data
-      this.closeRoomList()
-      this.$store.state.accessToBattle = true
-      this.$store.state.currentRoom = roomId
+      this.$store.commit("setCurrentRoom", roomId)
       await this.$router.push({name: 'game'})
     }
   }
