@@ -25,11 +25,11 @@ const enterRoomAPI = (roomId) => getAPItoken.post('/rooms/',{id:roomId}, {header
 
 const mountTableAPI = () => getAPItoken.get('/statistics/', {headers:{ Authorization: `Bearer ${store.state.accessToken}`}})
 
-const tableSortAPI = (isAttack, fromDate, toDate) => getAPItoken.post('/statistics/',{
+const tableSortAPI = (isAttack, fromDate, toDate) => getAPItoken.get('/statistics/',{params:{
     isAttack: isAttack,
     fromDate: fromDate,
     toDate: toDate
-},{headers:{ Authorization: `Bearer ${store.state.accessToken}`}})
+},headers:{ Authorization: `Bearer ${store.state.accessToken}`}})
 
 const APIRefreshToken = (context) => getAPItoken.post('/api-token-refresh/', {refresh: context.state.refreshToken})
 
